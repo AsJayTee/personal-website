@@ -10,7 +10,6 @@ Title: DAE Simple Scene - Unlucky Library
 import React from "react";
 import { useGLTF } from "@react-three/drei";
 import { EnhancedOverlayItem } from "./EnhancedOverlayItem";
-import { degToRad } from "three/src/math/MathUtils.js";
 
 export function Room({ html, currentPageAtom, ...props }) {
   const { nodes, materials } = useGLTF("/models/room.glb");
