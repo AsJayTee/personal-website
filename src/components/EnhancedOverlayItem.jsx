@@ -12,7 +12,7 @@ export const EnhancedOverlayItem = ({
   headerTextColor = "text-black",
   buttonTextColor = "text-white",
   buttonText = "View Details",
-  width = "w-48",
+  width = "w-56",
   currentPageAtom,
   headerBgOpacity = "bg-opacity-20", 
   buttonBgOpacity = "bg-opacity-70", 
@@ -36,23 +36,46 @@ export const EnhancedOverlayItem = ({
         {...props}
       >
         {/* Wrapper div with padding to prevent clipping on hover */}
-        <div className="p-2 -m-2 transition-transform duration-300" style={{ transform: isHovered ? 'scale(1.05)' : 'scale(1)' }}>
+        <div 
+          className="p-3 -m-3 transition-all duration-300 ease-out" 
+          style={{ 
+            transform: isHovered 
+              ? 'scale(1.15) translateY(-8px)' 
+              : 'scale(1) translateY(0)',
+          }}
+        >
           <div 
-            className={`overflow-hidden rounded-md shadow-lg transition-all duration-300`}
+            className={`overflow-hidden rounded-md transition-all duration-300 ${
+              isHovered 
+                ? 'shadow-xl ring-2 ring-white ring-opacity-50' 
+                : 'shadow-md'
+            }`}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
             onClick={onItemClick}
           >
             <div
-              className={`${isHovered ? 'bg-white bg-opacity-95' : `${useGlassEffect ? 'glass' : 'bg-white'} ${headerBgOpacity}`}
-                p-2 w-full rounded-t-md transition-all duration-300 cursor-pointer`}
+              className={`${
+                isHovered 
+                  ? 'bg-white bg-opacity-95' 
+                  : `${useGlassEffect ? 'glass' : 'bg-white'} ${headerBgOpacity}`
+              } p-3 w-full rounded-t-md transition-all duration-300 cursor-pointer`}
             >
-              <h2 className={`font-bold text-sm ${isHovered ? 'text-black' : headerTextColor}`}>{title}</h2>
-              <p className={`text-xs ${isHovered ? 'text-black' : textColor}`}>{description}</p>
+              <h2 
+                className={`font-bold text-base ${isHovered ? 'text-black' : headerTextColor}`}
+                style={{ 
+                  transform: isHovered ? 'scale(1.05)' : 'scale(1)',
+                  transition: 'transform 0.3s ease-out' 
+                }}
+              >
+                {title}
+              </h2>
+              <p className={`text-sm ${isHovered ? 'text-black' : textColor}`}>{description}</p>
             </div>
             <div 
-              className={`${isHovered ? bgColorHover : bgColor} ${isHovered ? 'opacity-100' : buttonBgOpacity} 
-              transition-all duration-300 px-4 py-2 font-bold ${buttonTextColor} w-full text-xs rounded-b-md cursor-pointer`}
+              className={`${isHovered ? bgColorHover : bgColor} ${
+                isHovered ? 'opacity-100' : buttonBgOpacity
+              } transition-all duration-300 px-4 py-3 font-bold ${buttonTextColor} w-full text-sm rounded-b-md cursor-pointer`}
             >
               {buttonText}
             </div>
