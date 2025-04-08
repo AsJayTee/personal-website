@@ -16,6 +16,41 @@ export function Room({ html, currentPageAtom, ...props }) {
   const { nodes, materials } = useGLTF("/models/room.glb");
   return (
     <group {...props} dispose={null}>
+      {html && (
+        <EnhancedOverlayItem
+          position={[-2, 7.5, -1.5]} 
+          title={"You might be thinking:"}
+          description={"Why the hell would a Data Science student choose to build a 3D-Model Website?"}
+          bgColor={"bg-amber-500"}
+          bgColorHover={"bg-amber-600"}
+          buttonTextColor={"text-white"}
+          buttonText={"Here's Why."}
+          headerBgOpacity={"bg-opacity-20"}
+          buttonBgOpacity={"bg-opacity-70"}
+          useGlassEffect={true}
+          currentPageAtom={currentPageAtom}
+          className={"transition delay-300"}
+          onItemClick={() => console.log("Backpack clicked")}
+        />
+      )}
+      {html && (
+        <EnhancedOverlayItem
+          position={[2.6, 5.5, 2.2]} 
+          title={"You might be thinking:"}
+          description={"Why the hell would a Data Science student choose to build a 3D-Model Website?"}
+          bgColor={"bg-blue-500"}
+          bgColorHover={"bg-blue-600"}
+          buttonTextColor={"text-white"}
+          buttonText={"Here's Why."}
+          headerBgOpacity={"bg-opacity-20"}
+          buttonBgOpacity={"bg-opacity-70"}
+          useGlassEffect={true}
+          currentPageAtom={currentPageAtom}
+          className={"transition delay-300"}
+          onItemClick={() => console.log("Backpack clicked")}
+        />
+      )}
+
       <group name="Sketchfab_Scene">
         <group name="Sketchfab_model" rotation={[-Math.PI / 2, 0, 0]}>
           <group
@@ -119,23 +154,6 @@ export function Room({ html, currentPageAtom, ...props }) {
                     geometry={nodes.SM_Books_Ladder_M_Gold_0.geometry}
                     material={materials.M_Gold}
                   />
-                  {html && (
-                    <EnhancedOverlayItem
-                      position={[-2, 1.5, 7.5]}
-                      title={"You might be thinking:"}
-                      description={"Why the hell would a Data Science student choose to build a 3D-Model Website?"}
-                      bgColor={"bg-amber-600"}
-                      bgColorHover={"bg-amber-700"}
-                      buttonTextColor={"text-white"}
-                      buttonText={"Here's Why."}
-                      headerBgOpacity={"bg-opacity-20"}
-                      buttonBgOpacity={"bg-opacity-70"}
-                      useGlassEffect={true}
-                      currentPageAtom={currentPageAtom}
-                      className={"transition delay-300"}
-                      onItemClick={() => console.log("Backpack clicked")}
-                    />
-                  )}
                 </group>
                 <group name="SM_Books_Shelves">
                   <mesh
