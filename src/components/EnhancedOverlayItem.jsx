@@ -44,11 +44,11 @@ export const EnhancedOverlayItem = ({
             onClick={onItemClick}
           >
             <div
-              className={`bg-white ${isHovered ? 'bg-opacity-95' : headerBgOpacity} ${useGlassEffect && !isHovered ? 'backdrop-blur-sm' : ''} 
+              className={`${isHovered ? 'bg-white bg-opacity-95' : `${useGlassEffect ? 'glass' : 'bg-white'} ${headerBgOpacity}`}
                 p-2 w-full rounded-t-md transition-all duration-300 cursor-pointer`}
             >
-              <h2 className={`font-bold text-sm ${isHovered ? 'text-black' : headerTextColor} ${!isHovered && 'text-shadow'}`}>{title}</h2>
-              <p className={`text-xs ${isHovered ? 'text-black' : textColor} ${!isHovered && 'text-shadow'}`}>{description}</p>
+              <h2 className={`font-bold text-sm ${isHovered ? 'text-black' : headerTextColor}`}>{title}</h2>
+              <p className={`text-xs ${isHovered ? 'text-black' : textColor}`}>{description}</p>
             </div>
             <div 
               className={`${isHovered ? bgColorHover : bgColor} ${isHovered ? 'opacity-100' : buttonBgOpacity} 
