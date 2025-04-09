@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Html, Billboard } from "@react-three/drei";
 import { useAtom } from "jotai";
 
@@ -19,10 +19,39 @@ export const EnhancedOverlayItem = ({
   useGlassEffect = true,
   onItemClick = () => {},
   className = "",
+  modalTitle = "",
+  modalContent = null,
+  modalBgColor = "bg-white",
+  modalBorderColor = "border-gray-200",
   ...props
 }) => {
   const [currentPage] = useAtom(currentPageAtom);
   const [isHovered, setIsHovered] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  useEffect(() => {
+    const checkModalState = () => {
+      setIsModalOpen(!!window.isModalOpen);
+    };
+    
+    checkModalState();
+    
+    const intervalId = setInterval(checkModalState, 100);
+    
+    return () => clearInterval(intervalId);
+  }, []);
+
+  const handleClick = () => {
+    if (window.openModal) {
+      window.openModal({
+        title: modalTitle || title,
+        content: modalContent,
+        bgColor: modalBgColor,
+        borderColor: modalBorderColor
+      });
+    }
+    onItemClick();
+  };
 
   return (
     <Billboard position={position} follow={true} lockX={false} lockY={false} lockZ={false}>
@@ -35,46 +64,49 @@ export const EnhancedOverlayItem = ({
         } transition-opacity duration-1000 ${className}`}
         {...props}
       >
-        {/* Wrapper div with padding to prevent clipping on hover */}
         <div 
-          className="p-3 -m-3 transition-all duration-300 ease-out" 
+          className="p-3 -m-3" 
           style={{ 
-            transform: isHovered 
+            transform: isHovered && !isModalOpen 
               ? 'scale(1.15) translateY(-8px)' 
               : 'scale(1) translateY(0)',
+            opacity: isModalOpen ? 0 : 1,
+            transition: 'opacity 200ms ease-out, transform 300ms ease-out',
+            pointerEvents: isModalOpen ? 'none' : 'auto',
+            willChange: 'opacity, transform'
           }}
         >
           <div 
             className={`overflow-hidden rounded-md transition-all duration-300 ${
-              isHovered 
+              isHovered && !isModalOpen
                 ? 'shadow-xl ring-2 ring-white ring-opacity-50' 
                 : 'shadow-md'
             }`}
-            onMouseEnter={() => setIsHovered(true)}
+            onMouseEnter={() => !isModalOpen && setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
-            onClick={onItemClick}
+            onClick={handleClick}
           >
             <div
               className={`${
-                isHovered 
+                isHovered && !isModalOpen
                   ? 'bg-white bg-opacity-95' 
                   : `${useGlassEffect ? 'glass' : 'bg-white'} ${headerBgOpacity}`
               } p-3 w-full rounded-t-md transition-all duration-300 cursor-pointer`}
             >
               <h2 
-                className={`font-bold text-base ${isHovered ? 'text-black' : headerTextColor}`}
+                className={`font-bold text-base ${isHovered && !isModalOpen ? 'text-black' : headerTextColor}`}
                 style={{ 
-                  transform: isHovered ? 'scale(1.05)' : 'scale(1)',
+                  transform: isHovered && !isModalOpen ? 'scale(1.05)' : 'scale(1)',
                   transition: 'transform 0.3s ease-out' 
                 }}
               >
                 {title}
               </h2>
-              <p className={`text-sm ${isHovered ? 'text-black' : textColor}`}>{description}</p>
+              <p className={`text-sm ${isHovered && !isModalOpen ? 'text-black' : textColor}`}>{description}</p>
             </div>
             <div 
-              className={`${isHovered ? bgColorHover : bgColor} ${
-                isHovered ? 'opacity-100' : buttonBgOpacity
+              className={`${isHovered && !isModalOpen ? bgColorHover : bgColor} ${
+                isHovered && !isModalOpen ? 'opacity-100' : buttonBgOpacity
               } transition-all duration-300 px-4 py-3 font-bold ${buttonTextColor} w-full text-sm rounded-b-md cursor-pointer`}
             >
               {buttonText}
