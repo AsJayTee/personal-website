@@ -10,6 +10,7 @@ Title: DAE Simple Scene - Unlucky Library
 import React from "react";
 import { useGLTF } from "@react-three/drei";
 import { EnhancedOverlayItem } from "./EnhancedOverlayItem";
+import { AboutContent, ProjectsContent } from "./PageContents";
 
 export function Room({ html, currentPageAtom, ...props }) {
   const { nodes, materials } = useGLTF("/models/room.glb");
@@ -18,21 +19,24 @@ export function Room({ html, currentPageAtom, ...props }) {
       {html && (
         <EnhancedOverlayItem
           position={[-2, 7.5, -1.5]} 
-          title={"You might be thinking:"}
-          description={"Why the hell would a Data Science student choose to build a 3D-Model Website?"}
+          title={"About Me"}
+          description={"Learn more about my background and why I built this 3D website"}
           bgColor={"bg-amber-500"}
           bgColorHover={"bg-amber-600"}
           buttonTextColor={"text-white"}
-          buttonText={"Here's Why."}
+          buttonText={"View Profile"}
           headerBgOpacity={"bg-opacity-20"}
           buttonBgOpacity={"bg-opacity-70"}
           useGlassEffect={true}
           currentPageAtom={currentPageAtom}
           className={"transition delay-300"}
-          onItemClick={() => console.log("Backpack clicked")}
+          modalTitle={"About Me"}
+          modalContent={<AboutContent />}
+          modalBgColor={"bg-amber-50"}
+          modalBorderColor={"border-amber-200"}
         />
       )}
-      {html && (
+      {/* {html && (
         <EnhancedOverlayItem
           position={[2.6, 5.5, 2.2]} 
           title={"You might be thinking:"}
@@ -48,8 +52,7 @@ export function Room({ html, currentPageAtom, ...props }) {
           className={"transition delay-300"}
           onItemClick={() => console.log("Backpack clicked")}
         />
-      )}
-
+      )} */}
       <group name="Sketchfab_Scene">
         <group name="Sketchfab_model" rotation={[-Math.PI / 2, 0, 0]}>
           <group
