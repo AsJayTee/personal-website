@@ -4,6 +4,7 @@ import { Bloom, EffectComposer } from "@react-three/postprocessing";
 import { Suspense, useState, useEffect } from "react";
 import { LoadingScreen } from "./components/LoadingScreen";
 import { UI } from "./components/UI";
+import { ModalManager } from "./components/ModalManager";
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -30,6 +31,7 @@ function App() {
         </EffectComposer>
       </Canvas>
       <UI />
+      <ModalManager />
     </>
   );
 }
