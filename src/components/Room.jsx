@@ -19,7 +19,7 @@ export function Room({ html, currentPageAtom, ...props }) {
       {html && (
         <EnhancedOverlayItem
           position={[-2, 7.5, -1.5]} 
-          title={"Siah Jin Thau"}
+          title={"About Me"}
           description={"Learn more about my background and why I built this 3D website"}
           bgColor={"bg-amber-500"}
           bgColorHover={"bg-amber-600"}
