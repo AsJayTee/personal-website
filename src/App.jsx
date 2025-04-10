@@ -5,6 +5,7 @@ import { Suspense, useState, useEffect } from "react";
 import { LoadingScreen } from "./components/LoadingScreen";
 import { UI } from "./components/UI";
 import { ModalManager } from "./components/ModalManager";
+import { QualityToggle } from "./components/QualityToggle";
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -32,6 +33,7 @@ function App() {
       </Canvas>
       <UI />
       <ModalManager />
+      <QualityToggle />
     </>
   );
 }

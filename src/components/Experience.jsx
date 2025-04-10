@@ -12,6 +12,7 @@ import { lerp } from "three/src/math/MathUtils.js";
 import { atom } from "jotai";
 
 export const currentPageAtom = atom("intro");
+export const qualityAtom = atom("high");
 
 export const Experience = () => {
   const controls = useRef();
