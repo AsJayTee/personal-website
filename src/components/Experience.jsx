@@ -10,6 +10,7 @@ import { useAtom } from "jotai";
 import { useFrame } from "@react-three/fiber";
 import { lerp } from "three/src/math/MathUtils.js";
 import { atom } from "jotai";
+import { degToRad } from "three/src/math/MathUtils.js";
 
 export const currentPageAtom = atom("intro");
 export const qualityAtom = atom("high");
@@ -22,6 +23,7 @@ export const Experience = () => {
   const textMaterial2 = useRef();
   const [currentPage, setCurrentPage] = useAtom(currentPageAtom);
   const [showText, setShowText] = useState(true);
+  const [isIntroComplete, setIsIntroComplete] = useState(false);
 
   useFrame((_, delta) => {
     if (!showText) return; 
@@ -60,6 +62,9 @@ export const Experience = () => {
     controls.current.smoothTime = 1.6;
     setTimeout(() => {
       setCurrentPage("home");
+      setTimeout(() => {
+        setIsIntroComplete(true);
+      }, 1000);
     }, 3500);
     fitCamera();
   };
@@ -99,7 +104,12 @@ export const Experience = () => {
 
   return (
     <>
-      <CameraControls ref={controls} />
+      <CameraControls 
+        ref={controls} 
+        maxPolarAngle={degToRad(100)} 
+        minDistance={2} 
+        maxDistance={isIntroComplete ? 20 : 50} 
+      />
       <InvisibleBoxHome meshFitRef={meshFitCameraHome} />
       <InvisibleBoxRoom meshFitRef={meshFitCameraRoom} />
       
