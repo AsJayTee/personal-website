@@ -1,11 +1,11 @@
 import { Canvas } from "@react-three/fiber";
 import { Experience } from "./components/Experience";
-import { Bloom, EffectComposer } from "@react-three/postprocessing";
 import { Suspense, useState, useEffect } from "react";
 import { LoadingScreen } from "./components/LoadingScreen";
 import { UI } from "./components/UI";
 import { ModalManager } from "./components/ModalManager";
 import { QualityToggle } from "./components/QualityToggle";
+import { AdaptiveEffects } from "./components/AdaptiveEffects";
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -27,9 +27,7 @@ function App() {
         <Suspense fallback={null} onLoad={() => setIsLoading(false)}>
           <Experience />
         </Suspense>
-        <EffectComposer>
-          <Bloom mipmapBlur={1} intensity={0.5} />
-        </EffectComposer>
+        <AdaptiveEffects />
       </Canvas>
       <UI />
       <ModalManager />
