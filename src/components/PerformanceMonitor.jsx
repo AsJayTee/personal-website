@@ -50,9 +50,10 @@ export const PerformanceMonitor = () => {
       
       if (now - lastTime >= 1000) {
         const fps = Math.round((frameCount * 1000) / (now - lastTime));
+        console.log(`FPS: ${fps}`);
         setCurrentFps(fps);
         
-        if (fps < 30) {
+        if (fps < 40) {
           lowFpsCounter++;
           
           if (lowFpsCounter >= 3 && now - lastRecommendationTime > 120000 && !dismissed) {
