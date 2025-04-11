@@ -3,22 +3,53 @@ import { WebsiteText } from "./WebsiteText";
 import { StaticRoom } from "./StaticRoom";
 import { Floor } from "./Floor";
 import { Lighting } from "./Lighting";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { InvisibleBoxHome } from "./InvisibleBoxHome";
 import { InvisibleBoxRoom } from "./InvisibleBoxRoom";
 import { useAtom } from "jotai";
 import { useFrame } from "@react-three/fiber";
-import { lerp } from "three/src/math/MathUtils.js";
 import { atom } from "jotai";
 import { degToRad } from "three/src/math/MathUtils.js";
 
 export const currentPageAtom = atom("intro");
-
-// The atom that determines the actual rendering quality (only changed on page load)
 export const qualityAtom = atom("high");
-
-// Separate atom just for the toggle UI display
 export const qualityUIAtom = atom("high");
+
+const useAnimatedOpacity = (initialValue = 1, threshold = 0.001) => {
+  const value = useRef(initialValue);
+  const target = useRef(initialValue);
+  const isAnimating = useRef(false);
+  const lastTime = useRef(0);
+  
+  const set = useCallback((newTarget, onComplete) => {
+    target.current = newTarget;
+    isAnimating.current = true;
+    
+    if (Math.abs(value.current - target.current) < threshold) {
+      value.current = target.current;
+      isAnimating.current = false;
+      onComplete?.();
+    }
+  }, [threshold]);
+  
+  const update = useCallback((delta) => {
+    if (!isAnimating.current) return value.current;
+    
+    const speed = 5 * delta;
+    const diff = target.current - value.current;
+    
+    if (Math.abs(diff) < threshold) {
+      value.current = target.current;
+      isAnimating.current = false;
+      return value.current;
+    }
+    
+    value.current += diff * speed;
+    return value.current;
+  }, [threshold]);
+  
+  return [value, target, set, update, isAnimating];
+};
 
 export const Experience = () => {
   const controls = useRef();
@@ -32,46 +63,38 @@ export const Experience = () => {
   const [showText, setShowText] = useState(true);
   const [isIntroComplete, setIsIntroComplete] = useState(false);
   
-  // Load saved quality preference only when component first mounts
+  const [opacityValue, opacityTarget, setOpacityTarget, updateOpacity, isAnimating] = useAnimatedOpacity(1);
+  
   useEffect(() => {
     const savedQuality = localStorage.getItem("preferredQuality");
     if (savedQuality === "low" || savedQuality === "high") {
       setQuality(savedQuality);
-      setQualityUI(savedQuality); // Also update the UI state
+      setQualityUI(savedQuality);
     }
-  }, []); // Empty dependency array ensures this only runs once
+  }, []); 
 
   useFrame((_, delta) => {
-    if (!showText) return; 
+    if (!textMaterial1.current || !textMaterial2.current) return;
     
-    if (currentPage === "home" || currentPage === "intro") {
-      textMaterial1.current.opacity = lerp(
-        textMaterial1.current.opacity,
-        1,
-        delta * 1.5
-      );
-      textMaterial2.current.opacity = lerp(
-        textMaterial2.current.opacity,
-        1,
-        delta * 1.5
-      );
-    } else {
-      textMaterial1.current.opacity = lerp(
-        textMaterial1.current.opacity,
-        0,
-        delta * 1.5
-      );
-      textMaterial2.current.opacity = lerp(
-        textMaterial2.current.opacity,
-        0,
-        delta * 1.5
-      );
+    if (isAnimating.current) {
+      const opacity = updateOpacity(delta);
+      textMaterial1.current.opacity = opacity;
+      textMaterial2.current.opacity = opacity;
       
-      if (textMaterial1.current.opacity < 0.001) {
+      if (opacity < 0.001 && opacityTarget.current === 0 && showText) {
         setShowText(false);
       }
     }
   });
+
+  useEffect(() => {
+    if (currentPage === "home" || currentPage === "intro") {
+      setShowText(true);
+      setOpacityTarget(1);
+    } else {
+      setOpacityTarget(0);
+    }
+  }, [currentPage, setOpacityTarget]);
 
   const intro = () => {
     controls.current.dolly(-40);
@@ -96,12 +119,6 @@ export const Experience = () => {
       controls.current.fitToBox(targetMesh, true);
     }
   };
-
-  useEffect(() => {
-    if (currentPage === "home" || currentPage === "intro") {
-      setShowText(true);
-    }
-  }, [currentPage]);
 
   useEffect(() => {
     intro();
