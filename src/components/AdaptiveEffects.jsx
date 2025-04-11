@@ -1,48 +1,24 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { EffectComposer, Bloom } from '@react-three/postprocessing';
-import { useAtom } from 'jotai';
-import { qualityAtom } from './Experience';
 
 export const AdaptiveEffects = () => {
-  const [quality] = useAtom(qualityAtom);
-  const [intensity, setIntensity] = useState(quality === 'high' ? 0.5 : 0);
-
+  // Use local state that's only set on mount
+  const [quality, setQuality] = useState('high');
+  
+  // Read from localStorage only on mount, not on every render
   useEffect(() => {
-    const targetIntensity = quality === 'high' ? 0.5 : 0;
-    
-    if (intensity === targetIntensity) return;
-    
-    const duration = 3000; 
-    const startIntensity = intensity;
-    const startTime = performance.now();
-    let animationFrame;
-    
-    const animateIntensity = () => {
-      const elapsed = performance.now() - startTime;
-      const progress = Math.min(elapsed / duration, 1);
-      
-      // Cubic ease-out for smooth transition
-      const eased = 1 - Math.pow(1 - progress, 3);
-      
-      setIntensity(startIntensity + (targetIntensity - startIntensity) * eased);
-      
-      if (progress < 1) {
-        animationFrame = requestAnimationFrame(animateIntensity);
-      }
-    };
-    
-    animationFrame = requestAnimationFrame(animateIntensity);
-    
-    return () => {
-      if (animationFrame) {
-        cancelAnimationFrame(animationFrame);
-      }
-    };
-  }, [quality]);
+    const savedQuality = localStorage.getItem("preferredQuality");
+    if (savedQuality === "low" || savedQuality === "high") {
+      setQuality(savedQuality);
+    }
+  }, []);
+  
+  // Set bloom intensity based on the local quality state
+  const bloomIntensity = quality === 'high' ? 0.5 : 0;
 
   return (
     <EffectComposer>
-      <Bloom mipmapBlur={1} intensity={intensity} />
+      <Bloom mipmapBlur={1} intensity={bloomIntensity} />
     </EffectComposer>
   );
 };

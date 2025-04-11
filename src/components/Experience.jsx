@@ -13,7 +13,12 @@ import { atom } from "jotai";
 import { degToRad } from "three/src/math/MathUtils.js";
 
 export const currentPageAtom = atom("intro");
+
+// The atom that determines the actual rendering quality (only changed on page load)
 export const qualityAtom = atom("high");
+
+// Separate atom just for the toggle UI display
+export const qualityUIAtom = atom("high");
 
 export const Experience = () => {
   const controls = useRef();
@@ -22,8 +27,19 @@ export const Experience = () => {
   const textMaterial1 = useRef();
   const textMaterial2 = useRef();
   const [currentPage, setCurrentPage] = useAtom(currentPageAtom);
+  const [quality, setQuality] = useAtom(qualityAtom);
+  const [, setQualityUI] = useAtom(qualityUIAtom);
   const [showText, setShowText] = useState(true);
   const [isIntroComplete, setIsIntroComplete] = useState(false);
+  
+  // Load saved quality preference only when component first mounts
+  useEffect(() => {
+    const savedQuality = localStorage.getItem("preferredQuality");
+    if (savedQuality === "low" || savedQuality === "high") {
+      setQuality(savedQuality);
+      setQualityUI(savedQuality); // Also update the UI state
+    }
+  }, []); // Empty dependency array ensures this only runs once
 
   useFrame((_, delta) => {
     if (!showText) return; 

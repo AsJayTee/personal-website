@@ -1,45 +1,24 @@
 import { MeshReflectorMaterial } from "@react-three/drei";
-import { useAtom } from "jotai";
-import { qualityAtom } from "./Experience";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export const Floor = () => {
   const floorPosition = [0, -1, 0];
   const floorRotation = [-Math.PI / 2, 0, 0];
-  const [quality] = useAtom(qualityAtom);
   
-  const [resolution, setResolution] = useState(quality === "high" ? 2048 : 512);
-  const [mixStrength, setMixStrength] = useState(quality === "high" ? 10 : 2);
+  // Use local state that's only set on mount
+  const [quality, setQuality] = useState('high');
   
+  // Read from localStorage only on mount, not on every render
   useEffect(() => {
-    setResolution(quality === "high" ? 2048 : 512);
-    
-    const targetStrength = quality === "high" ? 10 : 2;
-    const duration = 1000;
-    const startStrength = mixStrength;
-    const startTime = performance.now();
-    let animationFrame;
-    
-    const animate = () => {
-      const elapsed = performance.now() - startTime;
-      const progress = Math.min(elapsed / duration, 1);
-      const eased = 1 - Math.pow(1 - progress, 3);
-      
-      setMixStrength(startStrength + (targetStrength - startStrength) * eased);
-      
-      if (progress < 1) {
-        animationFrame = requestAnimationFrame(animate);
-      }
-    };
-    
-    animationFrame = requestAnimationFrame(animate);
-    
-    return () => {
-      if (animationFrame) {
-        cancelAnimationFrame(animationFrame);
-      }
-    };
-  }, [quality]);
+    const savedQuality = localStorage.getItem("preferredQuality");
+    if (savedQuality === "low" || savedQuality === "high") {
+      setQuality(savedQuality);
+    }
+  }, []);
+  
+  // Set these values based on the local quality state
+  const resolution = quality === "high" ? 2048 : 512;
+  const mixStrength = quality === "high" ? 10 : 2;
 
   return (
     <>

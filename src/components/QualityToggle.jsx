@@ -1,11 +1,26 @@
 import { useAtom } from "jotai";
-import { qualityAtom } from "./Experience";
+import { qualityUIAtom } from "./Experience";
 
 export const QualityToggle = () => {
-  const [quality, setQuality] = useAtom(qualityAtom);
+  const [qualityUI, setQualityUI] = useAtom(qualityUIAtom);
   
   const toggleQuality = () => {
-    setQuality(quality === "high" ? "low" : "high");
+    const newQuality = qualityUI === "high" ? "low" : "high";
+    
+    // Only update the UI state atom, not the rendering quality atom
+    setQualityUI(newQuality);
+    
+    // Save the quality preference to localStorage
+    try {
+      localStorage.setItem("preferredQuality", newQuality);
+      
+      // Wait for the animation to complete before refreshing
+      setTimeout(() => {
+        window.location.reload();
+      }, 300);
+    } catch (error) {
+      console.error("Failed to save quality setting:", error);
+    }
   };
 
   return (
@@ -15,21 +30,21 @@ export const QualityToggle = () => {
         <button 
           onClick={toggleQuality}
           className={`relative w-20 h-7 rounded-full transition-colors duration-200 ${
-            quality === "high" ? "bg-blue-500" : "bg-gray-600"
+            qualityUI === "high" ? "bg-blue-500" : "bg-gray-600"
           }`}
-          aria-label={`Switch to ${quality === "high" ? "low" : "high"} quality`}
+          aria-label={`Switch to ${qualityUI === "high" ? "low" : "high"} quality`}
         >
           {/* Absolutely positioned text elements */}
           <span 
             className={`absolute left-2.5 top-1/2 -translate-y-1/2 text-xs font-medium transition-colors ${
-              quality === "low" ? "text-white" : "text-white/40"
+              qualityUI === "low" ? "text-white" : "text-white/40"
             }`}
           >
             Low
           </span>
           <span 
             className={`absolute right-2.5 top-1/2 -translate-y-1/2 text-xs font-medium transition-colors ${
-              quality === "high" ? "text-white" : "text-white/40"
+              qualityUI === "high" ? "text-white" : "text-white/40"
             }`}
           >
             High
@@ -38,7 +53,7 @@ export const QualityToggle = () => {
           {/* The sliding indicator */}
           <div 
             className={`absolute w-9 h-5 top-1 left-1 bg-white opacity-20 rounded-full transition-transform duration-200 ${
-              quality === "high" ? "translate-x-8.75" : "translate-x-0"
+              qualityUI === "high" ? "translate-x-8.75" : "translate-x-0"
             }`}
           />
         </button>
