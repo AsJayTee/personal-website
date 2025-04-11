@@ -6,17 +6,25 @@ import { UI } from "./components/UI";
 import { ModalManager } from "./components/ModalManager";
 import { QualityToggle } from "./components/QualityToggle";
 import { AdaptiveEffects } from "./components/AdaptiveEffects";
+import { detectDeviceCapabilities } from "./utils/deviceDetection";
+import { useAtom } from "jotai";
+import { qualityAtom } from "./components/Experience";
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
-
+  const [, setQuality] = useAtom(qualityAtom);
+  
   useEffect(() => {
+    const recommendedQuality = detectDeviceCapabilities();
+    console.log(`Setting initial quality to: ${recommendedQuality}`);
+    setQuality(recommendedQuality);
+    
     const timer = setTimeout(() => {
       setIsLoading(false);
     }, 1000);
 
     return () => clearTimeout(timer);
-  }, []);
+  }, [setQuality]);
 
   return (
     <>
