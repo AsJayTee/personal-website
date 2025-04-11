@@ -5,10 +5,8 @@ export const Floor = () => {
   const floorPosition = [0, -1, 0];
   const floorRotation = [-Math.PI / 2, 0, 0];
   
-  // Use local state that's only set on mount
   const [quality, setQuality] = useState('high');
   
-  // Read from localStorage only on mount, not on every render
   useEffect(() => {
     const savedQuality = localStorage.getItem("preferredQuality");
     if (savedQuality === "low" || savedQuality === "high") {
@@ -16,8 +14,7 @@ export const Floor = () => {
     }
   }, []);
   
-  // Set these values based on the local quality state
-  const resolution = quality === "high" ? 2048 : 512;
+  const resolution = quality === "high" ? 2048 : 256;
   const mixStrength = quality === "high" ? 10 : 2;
 
   return (
