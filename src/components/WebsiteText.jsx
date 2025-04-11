@@ -2,6 +2,9 @@ import { RenderTexture, Text, useFont } from "@react-three/drei";
 import { degToRad } from "three/src/math/MathUtils";
 import { Color } from "three";
 import { FloatingRoom } from "./FloatingRoom";
+import { useAtom } from "jotai";
+import { qualityAtom } from "./Experience";
+import { useEffect, useRef } from "react";
 
 export const WebsiteText = ({
   textMaterial1,
@@ -9,8 +12,10 @@ export const WebsiteText = ({
   visible1,
   visible2,
 }) => {
+  const [quality] = useAtom(qualityAtom);
   const textPosition = [-1.5, -0.75, 0];
   const textRotation = [0, degToRad(30), 0];
+  const renderTextureRef = useRef(null);
 
   const bloomColor = new Color("#fff");
   bloomColor.multiplyScalar(1.5);
@@ -33,8 +38,11 @@ export const WebsiteText = ({
           ref={textMaterial1}
           visible={visible1}
         >
-          <RenderTexture attach={"map"}>
-            <FloatingRoom />
+          <RenderTexture ref={renderTextureRef} attach={"map"}>
+            {quality === "high" && <FloatingRoom />}
+            {quality === "low" && (
+              <color attach="background" args={["#ffffff"]} />
+            )}
           </RenderTexture>
         </meshBasicMaterial>
       </Text>
