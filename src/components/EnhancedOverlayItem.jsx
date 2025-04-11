@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import { Html, Billboard } from "@react-three/drei";
 import { useAtom } from "jotai";
+import { memo } from "react";
 
-export const EnhancedOverlayItem = ({
+export const EnhancedOverlayItem = memo(({ 
   position = [0, 0, 0],
   title = "Title",
   description = "Description text goes here",
@@ -116,4 +117,4 @@ export const EnhancedOverlayItem = ({
       </Html>
     </Billboard>
   );
-};
+});
