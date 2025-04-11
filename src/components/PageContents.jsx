@@ -49,9 +49,9 @@ export const AboutContent = () => {
         <h3 className="text-2xl font-bold mt-8 mb-4">My Journey</h3>
         <p className="mb-4 text-lg">
           I've always loved building backend systems, especially ones powered by
-          advanced LLM architecture like RAG and smart tooling. But honestly,
-          the typical chatbot interface—just typing into a text box—always felt
-          a little underwhelming.
+          LLM architecture like Advanced RAG and Model Context Protocol(s). But honestly,
+          the typical chatbot interface of typing into a text box always felt...
+          a little underwhelming?
         </p>
 
         <p className="mb-4 text-lg">
@@ -76,8 +76,8 @@ export const AboutContent = () => {
         <h3 className="text-2xl font-bold mb-4">From Concept to Reality</h3>
         <p className="mb-4 text-lg">
           This site is a product of that journey. It's definitely still a work
-          in progress - there are some performance things I'm still figuring
-          out—but I'm proud of how far it's come.
+          in progress - there are some performance issues I'm still figuring
+          out - but I'm proud of how far it's come.
         </p>
         <p className="mb-4 text-lg">
           Even better, I got to put it into action and actually built a 3D
@@ -112,7 +112,7 @@ export const AboutContent = () => {
         <p className="mb-4 text-lg">
           I'm continuing to explore the intersection of AI and interactive 3D
           experiences. I believe the future of human-AI interaction lies in
-          creating more natural, intuitive interfaces — and I'm excited to be
+          creating more natural, intuitive interfaces... And I'm excited to be
           part of that journey.
         </p>
 
