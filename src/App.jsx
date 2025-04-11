@@ -9,6 +9,7 @@ import { AdaptiveEffects } from "./components/AdaptiveEffects";
 import { detectDeviceCapabilities } from "./utils/deviceDetection";
 import { useAtom } from "jotai";
 import { qualityAtom } from "./components/Experience";
+import { PerformanceMonitor } from "./components/PerformanceMonitor";
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -40,6 +41,7 @@ function App() {
       <UI />
       <ModalManager />
       <QualityToggle />
+      <PerformanceMonitor />
     </>
   );
 }
